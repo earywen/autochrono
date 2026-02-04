@@ -96,8 +96,8 @@ def main():
     window = webview.create_window(
         title='AutoChrono',
         url=html_path,
-        width=500,
-        height=620,
+        width=480,
+        height=520,
         resizable=False,
         js_api=api,
         background_color='#1c365b'

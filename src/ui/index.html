@@ -1,197 +1,210 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoChrono</title>
+    <title>AutoChrono — Ginger Burgeap</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ginger-blue': '#1c365b',
+                        'ginger-green': '#96c63e',
+                        'ginger-blue-light': '#2a4a75',
+                        'ginger-blue-dark': '#152845',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #152845 0%, #1c365b 50%, #2a4a75 100%);
             min-height: 100vh;
         }
-        
+
         .glass {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .glass-input {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
         }
-        
+
         .glass-input:focus {
             background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            border-color: rgba(150, 198, 62, 0.6);
+            box-shadow: 0 0 20px rgba(150, 198, 62, 0.3);
             outline: none;
         }
-        
-        .btn-gradient {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+
+        .btn-ginger {
+            background: linear-gradient(135deg, #96c63e 0%, #7ab32e 100%);
+            color: #1c365b;
             transition: all 0.3s ease;
         }
-        
-        .btn-gradient:hover {
+
+        .btn-ginger:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 40px rgba(150, 198, 62, 0.4);
         }
-        
+
         .btn-ghost {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(150, 198, 62, 0.4);
+            color: #96c63e;
             transition: all 0.3s ease;
         }
-        
+
         .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(150, 198, 62, 0.1);
+            border-color: #96c63e;
         }
-        
-        .glow {
-            animation: glow 2s ease-in-out infinite alternate;
+
+        .glow-green {
+            animation: glowGreen 2s ease-in-out infinite alternate;
         }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
-            to { text-shadow: 0 0 30px rgba(139, 92, 246, 0.8); }
+
+        @keyframes glowGreen {
+            from {
+                text-shadow: 0 0 20px rgba(150, 198, 62, 0.5);
+            }
+
+            to {
+                text-shadow: 0 0 30px rgba(150, 198, 62, 0.8);
+            }
         }
-        
+
         .fade-in {
             animation: fadeIn 0.5s ease-out;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .section-label {
-            background: linear-gradient(90deg, rgba(99, 102, 241, 0.3) 0%, transparent 100%);
-            border-left: 3px solid #6366f1;
+            background: linear-gradient(90deg, rgba(150, 198, 62, 0.2) 0%, transparent 100%);
+            border-left: 3px solid #96c63e;
         }
-        
-        /* Custom scrollbar */
+
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.05);
         }
+
         ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.5);
+            background: rgba(150, 198, 62, 0.5);
             border-radius: 4px;
         }
     </style>
 </head>
+
 <body class="text-white p-6">
     <div class="max-w-2xl mx-auto fade-in">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold glow mb-2">✨ AutoChrono</h1>
+            <div class="inline-flex items-center gap-3 mb-2">
+                <span class="text-4xl">📋</span>
+                <h1 class="text-4xl font-bold">
+                    <span class="text-white">Auto</span><span class="text-ginger-green glow-green">Chrono</span>
+                </h1>
+            </div>
             <p class="text-gray-400">Générateur de module VBA pour Outlook</p>
+            <p class="text-ginger-green text-sm font-medium mt-1">Ginger Burgeap</p>
         </div>
-        
+
         <!-- Main Card -->
         <div class="glass rounded-3xl p-8 shadow-2xl">
             <!-- Section: User Info -->
             <div class="section-label px-4 py-2 rounded-r-lg mb-4">
-                <span class="text-sm font-semibold text-indigo-300">👤 Informations utilisateur</span>
+                <span class="text-sm font-semibold text-ginger-green">👤 Informations utilisateur</span>
             </div>
-            
+
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-300 mb-2">Trigramme</label>
-                <input 
-                    type="text" 
-                    id="trigram" 
-                    placeholder="Ex: LABR"
-                    class="glass-input w-full px-4 py-3 rounded-xl text-white placeholder-gray-500"
-                >
+                <input type="text" id="trigram" placeholder="Ex: LABR"
+                    class="glass-input w-full px-4 py-3 rounded-xl text-white placeholder-gray-500">
             </div>
-            
+
             <!-- Section: Paths -->
             <div class="section-label px-4 py-2 rounded-r-lg mb-4 mt-8">
-                <span class="text-sm font-semibold text-indigo-300">📁 Chemins Chrono</span>
+                <span class="text-sm font-semibold text-ginger-green">📁 Chemins Chrono</span>
             </div>
-            
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-300 mb-2">Dossier Chrono</label>
                 <div class="flex gap-2">
-                    <input 
-                        type="text" 
-                        id="chronoFolder" 
-                        placeholder="T:/Secretariat/Chrono/2026"
-                        class="glass-input flex-1 px-4 py-3 rounded-xl text-white placeholder-gray-500"
-                    >
+                    <input type="text" id="chronoFolder" placeholder="T:/Secretariat/Chrono/2026"
+                        class="glass-input flex-1 px-4 py-3 rounded-xl text-white placeholder-gray-500">
                     <button onclick="browseFolder()" class="btn-ghost px-4 py-3 rounded-xl font-medium">
                         Parcourir
                     </button>
                 </div>
             </div>
-            
+
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-300 mb-2">Fichier Excel Chrono</label>
                 <div class="flex gap-2">
-                    <input 
-                        type="text" 
-                        id="chronoFile" 
-                        placeholder="T:/Secretariat/Chrono/2026/chrono 2026.xlsx"
-                        class="glass-input flex-1 px-4 py-3 rounded-xl text-white placeholder-gray-500"
-                    >
+                    <input type="text" id="chronoFile" placeholder="T:/Secretariat/Chrono/2026/chrono 2026.xlsx"
+                        class="glass-input flex-1 px-4 py-3 rounded-xl text-white placeholder-gray-500">
                     <button onclick="browseFile()" class="btn-ghost px-4 py-3 rounded-xl font-medium">
                         Parcourir
                     </button>
                 </div>
             </div>
-            
+
             <!-- Section: Excel Columns -->
             <div class="section-label px-4 py-2 rounded-r-lg mb-4 mt-8">
-                <span class="text-sm font-semibold text-indigo-300">📊 Colonnes Excel</span>
+                <span class="text-sm font-semibold text-ginger-green">📊 Colonnes Excel</span>
             </div>
-            
+
             <div class="grid grid-cols-3 gap-4 mb-8">
                 <div class="text-center">
                     <label class="block text-sm font-medium text-gray-300 mb-2">N° Chrono</label>
-                    <input 
-                        type="text" 
-                        id="colChrono" 
-                        value="A"
-                        class="glass-input w-full px-4 py-3 rounded-xl text-center text-white font-mono text-lg"
-                    >
+                    <input type="text" id="colChrono" value="A"
+                        class="glass-input w-full px-4 py-3 rounded-xl text-center text-white font-mono text-lg">
                 </div>
                 <div class="text-center">
                     <label class="block text-sm font-medium text-gray-300 mb-2">Client</label>
-                    <input 
-                        type="text" 
-                        id="colClient" 
-                        value="B"
-                        class="glass-input w-full px-4 py-3 rounded-xl text-center text-white font-mono text-lg"
-                    >
+                    <input type="text" id="colClient" value="B"
+                        class="glass-input w-full px-4 py-3 rounded-xl text-center text-white font-mono text-lg">
                 </div>
                 <div class="text-center">
                     <label class="block text-sm font-medium text-gray-300 mb-2">Trigramme</label>
-                    <input 
-                        type="text" 
-                        id="colTrigram" 
-                        value="C"
-                        class="glass-input w-full px-4 py-3 rounded-xl text-center text-white font-mono text-lg"
-                    >
+                    <input type="text" id="colTrigram" value="C"
+                        class="glass-input w-full px-4 py-3 rounded-xl text-center text-white font-mono text-lg">
                 </div>
             </div>
-            
+
             <!-- Buttons -->
             <div class="space-y-3">
-                <button onclick="generateVBA()" class="btn-gradient w-full py-4 rounded-xl text-lg font-semibold">
+                <button onclick="generateVBA()" class="btn-ginger w-full py-4 rounded-xl text-lg font-bold">
                     🚀 Générer le module VBA
                 </button>
                 <button onclick="showInstructions()" class="btn-ghost w-full py-3 rounded-xl font-medium">
@@ -199,63 +212,59 @@
                 </button>
             </div>
         </div>
-        
+
         <!-- Footer -->
         <p class="text-center text-gray-500 text-sm mt-6">
-            AutoChrono v2.0 — Interface moderne avec PyWebView
+            AutoChrono v2.0 — <span class="text-ginger-green">Ginger Burgeap</span>
         </p>
     </div>
-    
+
     <!-- Instructions Modal -->
-    <div id="instructionsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50">
+    <div id="instructionsModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50">
         <div class="glass rounded-3xl p-8 max-w-lg mx-4 fade-in">
             <h2 class="text-2xl font-bold mb-4">📖 Instructions d'import</h2>
             <div class="text-gray-300 space-y-3 text-sm">
-                <p><span class="text-indigo-400 font-semibold">1.</span> Ouvrir Outlook</p>
-                <p><span class="text-indigo-400 font-semibold">2.</span> Appuyer sur <kbd class="bg-white/10 px-2 py-1 rounded">Alt + F11</kbd> pour ouvrir l'éditeur VBA</p>
-                <p><span class="text-indigo-400 font-semibold">3.</span> Menu : Fichier → Importer un fichier...</p>
-                <p><span class="text-indigo-400 font-semibold">4.</span> Sélectionner le fichier <code class="bg-white/10 px-2 py-1 rounded">AutoChrono.bas</code></p>
-                <p><span class="text-indigo-400 font-semibold">5.</span> Fermer l'éditeur (<kbd class="bg-white/10 px-2 py-1 rounded">Ctrl + Q</kbd>)</p>
+                <p><span class="text-ginger-green font-semibold">1.</span> Ouvrir Outlook</p>
+                <p><span class="text-ginger-green font-semibold">2.</span> Appuyer sur <kbd
+                        class="bg-white/10 px-2 py-1 rounded">Alt + F11</kbd> pour ouvrir l'éditeur VBA</p>
+                <p><span class="text-ginger-green font-semibold">3.</span> Menu : Fichier → Importer un fichier...</p>
+                <p><span class="text-ginger-green font-semibold">4.</span> Sélectionner le fichier <code
+                        class="bg-white/10 px-2 py-1 rounded">AutoChrono.bas</code></p>
+                <p><span class="text-ginger-green font-semibold">5.</span> Fermer l'éditeur (<kbd
+                        class="bg-white/10 px-2 py-1 rounded">Ctrl + Q</kbd>)</p>
             </div>
             <div class="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
                 <p class="text-yellow-300 text-sm">
-                    ⚠️ Si Outlook bloque les macros : Fichier → Options → Centre de gestion de la confidentialité → Paramètres des macros → "Notifications pour toutes les macros"
+                    ⚠️ Si Outlook bloque les macros : Fichier → Options → Centre de gestion de la confidentialité →
+                    Paramètres des macros → "Notifications pour toutes les macros"
                 </p>
             </div>
-            <button onclick="closeInstructions()" class="btn-gradient w-full py-3 rounded-xl font-medium mt-6">
+            <button onclick="closeInstructions()" class="btn-ginger w-full py-3 rounded-xl font-bold mt-6">
                 Fermer
             </button>
         </div>
     </div>
 
     <script>
-        // Wait for PyWebView API to be ready
-        window.addEventListener('pywebviewready', function() {
+        window.addEventListener('pywebviewready', function () {
             console.log('PyWebView ready!');
         });
-        
+
         async function browseFolder() {
             try {
                 const result = await pywebview.api.browse_folder();
-                if (result) {
-                    document.getElementById('chronoFolder').value = result;
-                }
-            } catch (e) {
-                console.error('Error browsing folder:', e);
-            }
+                if (result) document.getElementById('chronoFolder').value = result;
+            } catch (e) { console.error('Error:', e); }
         }
-        
+
         async function browseFile() {
             try {
                 const result = await pywebview.api.browse_file();
-                if (result) {
-                    document.getElementById('chronoFile').value = result;
-                }
-            } catch (e) {
-                console.error('Error browsing file:', e);
-            }
+                if (result) document.getElementById('chronoFile').value = result;
+            } catch (e) { console.error('Error:', e); }
         }
-        
+
         async function generateVBA() {
             const data = {
                 trigram: document.getElementById('trigram').value.trim(),
@@ -265,21 +274,11 @@
                 colClient: document.getElementById('colClient').value.trim().toUpperCase(),
                 colTrigram: document.getElementById('colTrigram').value.trim().toUpperCase()
             };
-            
-            // Validation
-            if (!data.trigram) {
-                alert('Le trigramme est requis');
-                return;
-            }
-            if (!data.chronoFolder) {
-                alert('Le dossier Chrono est requis');
-                return;
-            }
-            if (!data.chronoFile) {
-                alert('Le fichier Excel est requis');
-                return;
-            }
-            
+
+            if (!data.trigram) { alert('Le trigramme est requis'); return; }
+            if (!data.chronoFolder) { alert('Le dossier Chrono est requis'); return; }
+            if (!data.chronoFile) { alert('Le fichier Excel est requis'); return; }
+
             try {
                 const result = await pywebview.api.generate_vba(data);
                 if (result.success) {
@@ -287,27 +286,23 @@
                 } else {
                     alert('❌ Erreur : ' + result.error);
                 }
-            } catch (e) {
-                alert('❌ Erreur : ' + e.message);
-            }
+            } catch (e) { alert('❌ Erreur : ' + e.message); }
         }
-        
+
         function showInstructions() {
             document.getElementById('instructionsModal').classList.remove('hidden');
             document.getElementById('instructionsModal').classList.add('flex');
         }
-        
+
         function closeInstructions() {
             document.getElementById('instructionsModal').classList.add('hidden');
             document.getElementById('instructionsModal').classList.remove('flex');
         }
-        
-        // Close modal on backdrop click
-        document.getElementById('instructionsModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeInstructions();
-            }
+
+        document.getElementById('instructionsModal').addEventListener('click', function (e) {
+            if (e.target === this) closeInstructions();
         });
     </script>
 </body>
+
 </html>

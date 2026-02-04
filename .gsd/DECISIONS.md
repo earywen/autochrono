@@ -12,19 +12,19 @@ Each decision follows this structure:
 
 ---
 
-## ADR-001: Python + Tkinter for GUI
+## ADR-001: Python + CustomTkinter for GUI
 
 **Date**: 2026-02-04
 
-**Context**: Need a simple GUI application that generates VBA code. Must be easy to distribute as .exe in enterprise environment.
+**Context**: Need a GUI application that generates VBA code. Must be easy to distribute as .exe in enterprise environment. User wants a modern, professional-looking interface.
 
-**Decision**: Use Python 3.x with Tkinter for GUI, PyInstaller for packaging.
+**Decision**: Use Python 3.x with CustomTkinter for GUI, PyInstaller for packaging.
 
 **Consequences**:
-- ✅ Tkinter is included with Python, no external dependencies
+- ✅ Modern UI with dark mode and rounded corners
+- ✅ Professional look for enterprise environment
 - ✅ PyInstaller creates standalone .exe
-- ✅ Native Windows look and feel
-- ⚠️ Limited to basic UI components (acceptable for this use case)
+- ⚠️ Requires customtkinter dependency (mitigated by PyInstaller bundling)
 
 ---
 

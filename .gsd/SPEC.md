@@ -34,8 +34,8 @@ AutoChrono est un outil de productivité pour automatiser le rangement des mails
 
 | Décision | Choix | Justification |
 |----------|-------|---------------|
-| Langage | Python 3.x | Simple, portable, tkinter inclus nativement |
-| GUI | Tkinter | Pas de dépendances externes, look natif Windows |
+| Langage | Python 3.x | Simple, portable |
+| GUI | CustomTkinter | UI moderne, dark mode, look professionnel |
 | Packaging | PyInstaller | Génère un .exe standalone sans installation Python |
 | Output | Fichier .bas | Format standard pour import VBA dans Outlook |
 

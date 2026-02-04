@@ -97,7 +97,7 @@ def main():
         title='AutoChrono',
         url=html_path,
         width=480,
-        height=520,
+        height=560,
         resizable=False,
         js_api=api,
         background_color='#1c365b'

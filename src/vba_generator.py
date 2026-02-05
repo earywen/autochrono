@@ -108,7 +108,7 @@ Private Function ExtractChronoNumber(ByVal text As String) As String
 End Function
 
 '===============================================================================
-' Archive le mail dans le dossier Chrono
+' Archive le mail dans le dossier Chrono (CORRIGÉ - Recherche par numéro)
 '===============================================================================
 Private Sub ArchiveMail(ByVal mailItem As Object, ByVal chronoNumber As String)
     On Error GoTo ErrorHandler
@@ -116,7 +116,8 @@ Private Sub ArchiveMail(ByVal mailItem As Object, ByVal chronoNumber As String)
     Dim xlApp As Object
     Dim xlWb As Object
     Dim xlWs As Object
-    Dim lastRow As Long
+    Dim foundCell As Object
+    Dim targetRow As Long
     Dim clientName As String
     Dim trigramme As String
     Dim folderName As String
@@ -132,14 +133,28 @@ Private Sub ArchiveMail(ByVal mailItem As Object, ByVal chronoNumber As String)
     Set xlWb = xlApp.Workbooks.Open(CHRONO_FILE, ReadOnly:=True)
     Set xlWs = xlWb.Sheets(1)
     
-    ' Trouver la dernière ligne remplie
-    lastRow = xlWs.Cells(xlWs.Rows.Count, COL_CHRONO).End(-4162).Row ' xlUp = -4162
+    ' CORRECTION : Recherche du numéro de chrono dans la colonne A
+    ' LookIn:=-4163 (xlValues), LookAt:=1 (xlWhole) pour correspondance exacte
+    Set foundCell = xlWs.Columns(COL_CHRONO).Find(What:=chronoNumber, LookIn:=-4163, LookAt:=1)
     
-    ' Récupérer les informations de la dernière ligne
-    clientName = Trim(CStr(xlWs.Range(COL_CLIENT & lastRow).Value))
-    trigramme = Trim(CStr(xlWs.Range(COL_TRIGRAM & lastRow).Value))
+    If foundCell Is Nothing Then
+        ' Si le numéro n'existe pas dans Excel
+        MsgBox "Le numéro de Chrono " & chronoNumber & " n'a pas été trouvé dans le fichier Excel." & vbCrLf & _
+               "Le mail ne sera pas archivé automatiquement.", vbExclamation, "AutoChrono"
+        GoTo CleanExit
+    End If
     
-    ' Fermer Excel
+    targetRow = foundCell.Row
+    
+    ' Récupérer les informations de la ligne trouvée
+    clientName = Trim(CStr(xlWs.Range(COL_CLIENT & targetRow).Value))
+    trigramme = Trim(CStr(xlWs.Range(COL_TRIGRAM & targetRow).Value))
+    
+    ' Sécurité : remplacer les valeurs vides ou "0" par des valeurs par défaut
+    If clientName = "" Or clientName = "0" Then clientName = "Client_Inconnu"
+    If trigramme = "" Or trigramme = "0" Then trigramme = "Inc"
+    
+    ' Fermer Excel proprement
     xlWb.Close False
     xlApp.Quit
     Set xlWs = Nothing
@@ -165,16 +180,17 @@ Private Sub ArchiveMail(ByVal mailItem As Object, ByVal chronoNumber As String)
     Set fso = Nothing
     Exit Sub
     
-ErrorHandler:
-    ' Nettoyer en cas d'erreur
+CleanExit:
+    ' Nettoyage de sécurité
     On Error Resume Next
     If Not xlWb Is Nothing Then xlWb.Close False
     If Not xlApp Is Nothing Then xlApp.Quit
-    Set xlWs = Nothing
-    Set xlWb = Nothing
-    Set xlApp = Nothing
-    
+    Set fso = Nothing
+    Exit Sub
+
+ErrorHandler:
     MsgBox "Erreur lors de l'archivage : " & Err.Description, vbExclamation, "AutoChrono"
+    GoTo CleanExit
 End Sub
 
 '===============================================================================

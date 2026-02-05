@@ -162,7 +162,7 @@ Private Sub ArchiveMail(ByVal mailItem As Object, ByVal chronoNumber As String)
     Set xlApp = Nothing
     
     ' Créer le nom du dossier
-    folderName = chronoNumber & " - " & clientName & " (" & trigramme & ")"
+    folderName = chronoNumber & " " & clientName & " (" & trigramme & ")"
     folderPath = CHRONO_FOLDER & "\\" & folderName
     
     ' Créer le dossier s'il n'existe pas

@@ -139,10 +139,10 @@
         <!-- Buttons -->
         <div class="mt-auto">
             <button onclick="generateVBA()" class="btn-ginger w-full py-2.5 rounded-xl text-sm font-bold mb-1.5">
-                🚀 Générer le module VBA
+                📋 Copier le code VBA
             </button>
             <button onclick="showInstructions()" class="btn-ghost w-full py-1.5 rounded-lg text-[10px]">
-                📖 Instructions d'import
+                📖 Comment utiliser ?
             </button>
         </div>
     </div>
@@ -153,11 +153,11 @@
         <div class="glass rounded-xl p-4 max-w-xs mx-3">
             <h2 class="text-sm font-bold mb-2">📖 Instructions</h2>
             <div class="text-gray-300 space-y-1 text-[10px]">
-                <p><span class="text-[#96c63e]">1.</span> Ouvrir Outlook</p>
-                <p><span class="text-[#96c63e]">2.</span> Alt+F11 → Éditeur VBA</p>
-                <p><span class="text-[#96c63e]">3.</span> Fichier → Importer...</p>
-                <p><span class="text-[#96c63e]">4.</span> Sélectionner AutoChrono.bas</p>
-                <p><span class="text-[#96c63e]">5.</span> Fermer (Ctrl+Q)</p>
+                <p><span class="text-[#96c63e]">1.</span> Cliquez "Copier le code VBA"</p>
+                <p><span class="text-[#96c63e]">2.</span> Ouvrir Outlook → Alt+F11</p>
+                <p><span class="text-[#96c63e]">3.</span> Cliquez sur "ThisOutlookSession"</p>
+                <p><span class="text-[#96c63e]">4.</span> Ctrl+V pour coller le code</p>
+                <p><span class="text-[#96c63e]">5.</span> Fermer (X) et redémarrer Outlook</p>
             </div>
             <button onclick="closeInstructions()"
                 class="btn-ginger w-full py-1.5 rounded-lg text-xs font-bold mt-3">Fermer</button>
@@ -173,7 +173,7 @@
             if (!data.trigram) return alert('Trigramme requis');
             if (!data.chronoFolder) return alert('Dossier requis');
             if (!data.chronoFile) return alert('Fichier requis');
-            try { const r = await pywebview.api.generate_vba(data); alert(r.success ? '✅ Module généré !\n\n' + r.path : '❌ ' + r.error); } catch (e) { alert('❌ ' + e.message); }
+            try { const r = await pywebview.api.generate_vba(data); alert(r.success ? '✅ Code copié !\n\nCollez-le dans ThisOutlookSession (Alt+F11)' : '❌ ' + r.error); } catch (e) { alert('❌ ' + e.message); }
         }
         function showInstructions() { document.getElementById('instructionsModal').classList.remove('hidden'); document.getElementById('instructionsModal').classList.add('flex'); }
         function closeInstructions() { document.getElementById('instructionsModal').classList.add('hidden'); document.getElementById('instructionsModal').classList.remove('flex'); }

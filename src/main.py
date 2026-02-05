@@ -6,6 +6,10 @@ Modern web-based GUI with glassmorphism design
 import webview
 import os
 import sys
+
+# Fix recursion issue with pywebview on Windows
+sys.setrecursionlimit(500)
+
 from vba_generator import VBAGenerator
 
 
@@ -42,22 +46,9 @@ class Api:
         return None
     
     def generate_vba(self, data):
-        """Generate VBA file with provided data."""
+        """Generate VBA code and copy to clipboard."""
         try:
-            # Ask for save location
-            result = self.window.create_file_dialog(
-                webview.SAVE_DIALOG,
-                directory='',
-                save_filename='AutoChrono.bas',
-                file_types=('VBA Module (*.bas)', 'All Files (*.*)')
-            )
-            
-            if not result:
-                return {'success': False, 'error': 'Annulé par l\'utilisateur'}
-            
-            output_path = result if isinstance(result, str) else result[0]
-            
-            # Generate VBA
+            # Generate VBA code
             generator = VBAGenerator(
                 trigram=data['trigram'],
                 chrono_folder=data['chronoFolder'],
@@ -67,9 +58,19 @@ class Api:
                 col_trigram=data['colTrigram']
             )
             
-            generator.generate(output_path)
+            vba_code = generator.get_code()
             
-            return {'success': True, 'path': output_path}
+            # Copy to clipboard using pyperclip or fallback
+            try:
+                import pyperclip
+                pyperclip.copy(vba_code)
+            except ImportError:
+                # Fallback for Windows
+                import subprocess
+                process = subprocess.Popen(['clip'], stdin=subprocess.PIPE)
+                process.communicate(vba_code.encode('utf-8'))
+            
+            return {'success': True}
         
         except Exception as e:
             return {'success': False, 'error': str(e)}
@@ -89,6 +90,12 @@ def get_html_path():
 
 def main():
     """Launch the AutoChrono application."""
+    # Suppress pywebview warnings
+    import warnings
+    import logging
+    warnings.filterwarnings('ignore')
+    logging.getLogger('pywebview').setLevel(logging.CRITICAL)
+    
     api = Api()
     
     html_path = get_html_path()
@@ -105,7 +112,8 @@ def main():
     
     api.set_window(window)
     
-    webview.start(debug=False)
+    # Force EdgeChromium backend and disable private mode
+    webview.start(gui='edgechromium', debug=False)
 
 
 if __name__ == "__main__":

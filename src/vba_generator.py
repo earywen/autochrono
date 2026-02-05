@@ -88,23 +88,36 @@ ErrorHandler:
 End Sub
 
 '===============================================================================
-' Extrait le numéro de Chrono du texte
+' Extrait le numéro de Chrono du texte (version robuste)
+' Cherche "N" suivi d'au moins 4 chiffres pour éviter les faux positifs
 '===============================================================================
 Private Function ExtractChronoNumber(ByVal text As String) As String
-    Dim regex As Object
-    Dim matches As Object
+    Dim pos As Long
+    Dim numStr As String
+    Dim i As Long
     
-    Set regex = CreateObject("VBScript.RegExp")
-    regex.Global = False
-    regex.IgnoreCase = True
-    regex.Pattern = "N°\\s*(\\d+)"
+    pos = InStr(1, text, "N", vbTextCompare)
     
-    If regex.Test(text) Then
-        Set matches = regex.Execute(text)
-        ExtractChronoNumber = matches(0).SubMatches(0)
-    Else
-        ExtractChronoNumber = ""
-    End If
+    Do While pos > 0
+        i = pos + 1
+        If i <= Len(text) And Not IsNumeric(Mid(text, i, 1)) Then i = i + 1
+        If i <= Len(text) And Not IsNumeric(Mid(text, i, 1)) Then i = i + 1
+        
+        numStr = ""
+        Do While i <= Len(text) And IsNumeric(Mid(text, i, 1))
+            numStr = numStr & Mid(text, i, 1)
+            i = i + 1
+        Loop
+        
+        If Len(numStr) >= 4 Then
+            ExtractChronoNumber = numStr
+            Exit Function
+        End If
+        
+        pos = InStr(pos + 1, text, "N", vbTextCompare)
+    Loop
+    
+    ExtractChronoNumber = ""
 End Function
 
 '===============================================================================

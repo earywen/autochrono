@@ -77,7 +77,7 @@ class Api:
 
 
 def get_html_path():
-    """Get path to HTML file, works in dev and PyInstaller bundle."""
+    """Get the absolute path to the HTML file."""
     if getattr(sys, 'frozen', False):
         # Running as compiled
         base_path = sys._MEIPASS
@@ -113,6 +113,7 @@ def main():
     api.set_window(window)
     
     # Force EdgeChromium backend and disable private mode
+    # debug=False is critical to avoid recursion errors on Windows
     webview.start(gui='edgechromium', debug=False)
 
 

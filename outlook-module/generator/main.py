@@ -125,9 +125,9 @@ def main():
     window = webview.create_window(
         title='ChronoCreator Generator',
         url=html_path,
-        width=420,
-        height=480,
-        resizable=False,
+        width=900,
+        height=580,
+        resizable=True,
         js_api=api,
         background_color='#1c365b'
     )

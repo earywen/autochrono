@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChronoCreator Generator</title>
+    <title>Outlook Tool Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -66,6 +66,13 @@
             background: rgba(150, 198, 62, 0.1);
         }
 
+        .card-hover:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #96c63e;
+            cursor: pointer;
+        }
+
         .section-label {
             background: linear-gradient(90deg, rgba(150, 198, 62, 0.15) 0%, transparent 100%);
             border-left: 2px solid #96c63e;
@@ -93,159 +100,296 @@
             font-size: 10px;
             font-weight: 500;
         }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
 <body class="text-white p-3 flex flex-col h-full">
-    <!-- Header -->
-    <div class="text-center mb-2">
+
+    <!-- Header Common -->
+    <div class="text-center mb-4 relative">
         <h1 class="text-xl font-bold">
-            <span class="text-white">Chrono</span><span class="text-[#96c63e]">Creator</span>
+            <span class="text-white">Outlook</span><span class="text-[#96c63e]">ToolGen</span>
         </h1>
-        <p class="text-gray-400 text-[10px]">Generateur de module Outlook</p>
+        <p class="text-gray-400 text-[10px]">Generateur d'outils bureautiques</p>
+
+        <!-- Back Button (Hidden on Home) -->
+        <button id="btn-home" onclick="goHome()"
+            class="hidden absolute left-0 top-1 text-[10px] btn-ghost px-2 py-1 rounded flex items-center gap-1">
+            <span>⬅</span> Accueil
+        </button>
     </div>
 
-    <!-- Main 2-Column Layout -->
-    <div class="flex gap-3 flex-1 overflow-hidden">
+    <!-- VIEW: HOME -->
+    <div id="view-home" class="flex-1 flex flex-col items-center justify-center gap-6 animate-fade-in">
+        <div class="text-center">
+            <h2 class="text-lg font-semibold mb-1">Quel outil souhaitez-vous installer ?</h2>
+            <p class="text-gray-400 text-xs">Selectionnez un module pour generer son installateur VBA.</p>
+        </div>
 
-        <!-- LEFT: Form -->
-        <div class="glass rounded-xl p-4 w-[320px] flex flex-col">
-            <!-- User -->
-            <div class="section-label px-2 py-0.5 rounded-r mb-2">
-                <span class="text-[10px] font-semibold text-[#96c63e]">👤 Utilisateur</span>
-            </div>
-            <div class="mb-3">
-                <label class="block text-[10px] text-gray-400 mb-0.5">Trigramme</label>
-                <input type="text" id="trigram" placeholder="Ex: ARME"
-                    class="glass-input w-full px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500 uppercase">
-            </div>
-
-            <!-- Paths -->
-            <div class="section-label px-2 py-0.5 rounded-r mb-2">
-                <span class="text-[10px] font-semibold text-[#96c63e]">📁 Chemins reseau</span>
-            </div>
-            <div class="mb-2">
-                <label class="block text-[10px] text-gray-400 mb-0.5">Fichier Excel Chrono</label>
-                <div class="flex gap-1">
-                    <input type="text" id="chronoFile" placeholder="\\serveur\Chrono 2026.xlsx"
-                        class="glass-input flex-1 px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500">
-                    <button onclick="browseFile()" class="btn-ghost px-2 py-1.5 rounded-lg text-[10px]">📄</button>
+        <div class="flex gap-4 w-full max-w-2xl px-8 h-[220px]">
+            <!-- Card Chrono -->
+            <div onclick="switchView('CHRONO')"
+                class="glass card-hover rounded-xl p-6 flex-1 flex flex-col items-center justify-center gap-4 transition-all duration-300">
+                <div class="w-16 h-16 rounded-full bg-[#96c63e]/20 flex items-center justify-center text-3xl">
+                    📂
+                </div>
+                <div class="text-center">
+                    <h3 class="font-bold text-[#96c63e] mb-1">Generateur Chrono</h3>
+                    <p class="text-[10px] text-gray-300">Creez vos dossiers et numeros chrono en 1 clic. Lie a Excel.
+                    </p>
                 </div>
             </div>
-            <div class="mb-4">
-                <label class="block text-[10px] text-gray-400 mb-0.5">Dossier Chrono</label>
-                <div class="flex gap-1">
-                    <input type="text" id="chronoFolder" placeholder="\\serveur\Chrono"
-                        class="glass-input flex-1 px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500">
-                    <button onclick="browseFolder()" class="btn-ghost px-2 py-1.5 rounded-lg text-[10px]">📂</button>
+
+            <!-- Card AR -->
+            <div onclick="switchView('AR')"
+                class="glass card-hover rounded-xl p-6 flex-1 flex flex-col items-center justify-center gap-4 transition-all duration-300">
+                <div class="w-16 h-16 rounded-full bg-[#96c63e]/20 flex items-center justify-center text-3xl">
+                    📨
+                </div>
+                <div class="text-center">
+                    <h3 class="font-bold text-[#96c63e] mb-1">Accuse Reception</h3>
+                    <p class="text-[10px] text-gray-300">Reponse standardisee + classement automatique du mail envoye.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: CHRONO -->
+    <div id="view-chrono" class="hidden flex gap-3 flex-1 overflow-hidden animate-fade-in">
+        <!-- LEFT: Form -->
+        <div class="glass rounded-xl p-4 w-[320px] flex flex-col">
+            <div class="section-label px-2 py-0.5 rounded-r mb-2">
+                <span class="text-[10px] font-semibold text-[#96c63e]">🔧 Configuration Chrono</span>
+            </div>
+
+            <div class="space-y-3 mb-4">
+                <div>
+                    <label class="block text-[10px] text-gray-400 mb-0.5">Votre Trigramme</label>
+                    <input type="text" id="trigram" placeholder="Ex: ARME"
+                        class="glass-input w-full px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500 uppercase">
+                </div>
+
+                <div class="h-px bg-white/10 my-2"></div>
+
+                <div>
+                    <label class="block text-[10px] text-gray-400 mb-0.5">Fichier Excel Chrono</label>
+                    <div class="flex gap-1">
+                        <input type="text" id="chronoFile" placeholder="\\serveur\Chrono.xlsx"
+                            class="glass-input flex-1 px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500">
+                        <button onclick="browseFile()" class="btn-ghost px-2 py-1.5 rounded-lg text-[10px]">📄</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] text-gray-400 mb-0.5">Dossier Racine Chrono</label>
+                    <div class="flex gap-1">
+                        <input type="text" id="chronoFolder" placeholder="\\serveur\Chrono"
+                            class="glass-input flex-1 px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500">
+                        <button onclick="browseFolder()"
+                            class="btn-ghost px-2 py-1.5 rounded-lg text-[10px]">📂</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Buttons -->
             <div class="mt-auto space-y-2">
-                <button onclick="generateModule()" class="btn-ginger w-full py-2.5 rounded-xl text-xs font-bold">
-                    📦 1. Sauvegarder ChronoCreator.bas
+                <button onclick="generateModule('CHRONO')"
+                    class="btn-ginger w-full py-2.5 rounded-xl text-xs font-bold">
+                    📦 1. Generer ChronoCreator.bas
                 </button>
-                <button onclick="generateSession()" class="btn-ghost w-full py-2.5 rounded-xl text-xs font-semibold">
-                    📋 2. Copier ThisOutlookSession
+                <button onclick="generateSession('CHRONO')"
+                    class="btn-ghost w-full py-2.5 rounded-xl text-xs font-semibold">
+                    📋 2. Copier Session (Auto-Filing)
                 </button>
             </div>
         </div>
 
-        <!-- RIGHT: Tutorial -->
+        <!-- RIGHT: Tutorial Chrono -->
         <div class="glass rounded-xl p-4 flex-1 flex flex-col overflow-hidden">
-            <h2 class="text-sm font-bold mb-3 text-center">📖 Guide d'installation</h2>
+            <h2 class="text-sm font-bold mb-3 text-center">📖 Installation Chrono</h2>
+            <div class="tutorial-scroll flex-1 pr-2 space-y-4">
 
-            <div class="tutorial-scroll flex-1 pr-2 space-y-3">
-                <!-- Etape 1 -->
+                <!-- Step 1 -->
                 <div>
-                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1.5">
+                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1">
                         <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 1 : Generer les fichiers</span>
                     </div>
-                    <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
-                        <p>1. Remplissez votre <b class="text-white">Trigramme</b> (ex: LABR)</p>
-                        <p>2. Selectionnez les fichiers <b class="text-white">Excel</b> et <b
-                                class="text-white">Dossier</b> sur le serveur</p>
-                        <p>3. Cliquez <span class="text-[#96c63e]">1. Sauvegarder ChronoCreator.bas</span></p>
-                        <p class="text-gray-400 pl-3">→ Enregistrez sur votre Bureau</p>
-                        <p>4. Cliquez <span class="text-white">2. Copier ThisOutlookSession</span></p>
-                        <p class="text-gray-400 pl-3">→ Le code est copie dans le presse-papier</p>
+                    <div class="text-[11px] text-gray-300 pl-2 space-y-1">
+                        <p>1. Remplissez vote <b>Trigramme</b> et les chemins.</p>
+                        <p>2. Cliquez sur <b class="text-[#96c63e]">1. Generer ChronoCreator.bas</b> et sauvegardez-le.
+                        </p>
+                        <p>3. Cliquez sur <b class="text-white">2. Copier Session</b> (ne collez rien pour l'instant).
+                        </p>
                     </div>
                 </div>
 
-                <!-- Etape 2 -->
+                <!-- Step 2 -->
                 <div>
-                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1.5">
-                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 2 : Ouvrir l'editeur VBA</span>
+                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1">
+                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 2 : Importer le module</span>
                     </div>
-                    <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
-                        <p>1. Ouvrez <b class="text-white">Outlook</b></p>
-                        <p>2. Appuyez sur <span class="kbd">Alt</span> + <span class="kbd">F11</span></p>
+                    <div class="text-[11px] text-gray-300 pl-2 space-y-1">
+                        <p>1. Dans Outlook, faites <span class="kbd">Alt</span> + <span class="kbd">F11</span>.</p>
+                        <p>2. Allez dans <b>Fichier > Importer un fichier...</b></p>
+                        <p>3. Selectionnez le fichier <b>ChronoCreator.bas</b>.</p>
                     </div>
                 </div>
 
-                <!-- Etape 3 -->
+                <!-- Step 3 -->
                 <div>
-                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1.5">
-                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 3 : Importer le module</span>
+                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1">
+                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 3 : Activer l'auto-classement</span>
                     </div>
-                    <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
-                        <p>1. <b class="text-white">Fichier</b> → <b class="text-white">Importer un fichier...</b></p>
-                        <p>2. Selectionnez <b class="text-[#96c63e]">ChronoCreator.bas</b> (sur votre Bureau)</p>
+                    <div class="text-[11px] text-gray-300 pl-2 space-y-1">
+                        <p>1. A gauche, double-cliquez sur <b>ThisOutlookSession</b>.</p>
+                        <p>2. Collez le code (Ctrl+V) dans la fenetre blanche.</p>
+                        <p>3. Sauvegardez (<span class="kbd">Ctrl</span>+<span class="kbd">S</span>) et fermez la
+                            fenetre.</p>
                     </div>
                 </div>
 
-                <!-- Etape 4 -->
+                <!-- Step 4 -->
                 <div>
-                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1.5">
-                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 4 : Coller le code Session</span>
+                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1">
+                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 4 : Ajouter le bouton</span>
                     </div>
-                    <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
-                        <p>1. Double-cliquez sur <b class="text-white">ThisOutlookSession</b> (panneau gauche)</p>
-                        <p>2. Cliquez dans la zone blanche</p>
-                        <p>3. <span class="kbd">Ctrl</span> + <span class="kbd">V</span> pour coller</p>
-                        <p>4. <span class="kbd">Ctrl</span> + <span class="kbd">S</span> pour sauvegarder</p>
-                        <p>5. Fermez l'editeur (croix rouge)</p>
+                    <div class="text-[11px] text-gray-300 pl-2 space-y-1">
+                        <p>1. Allez dans <b>Fichier > Options > Personnaliser le ruban</b></p>
+                        <p class="text-[#96c63e] italic text-[10px]">Astuce : Pour le mettre dans la fenetre "Message",
+                            faites ceci depuis un Nouveau Message !</p>
+                        <p>2. A droite, choisissez l'onglet (ex: <b>Accueil</b> ou <b>Message</b>)</p>
+                        <p>3. Cliquez <b>Nouveau groupe</b> &rarr; Renommez "Chrono"</p>
+                        <p>4. Liste "Choisir les commandes" (gauche) : choisissez <b>Macros</b></p>
+                        <p>5. Selectionnez <b class="text-[#96c63e]">NouveauChrono</b></p>
+                        <p>6. Cliquez <b>Ajouter >></b></p>
+                        <p>7. Cliquez <b>Renommer</b> pour changer l'icone/nom</p>
+                        <p>8. Validez par <b>OK</b></p>
                     </div>
                 </div>
 
-                <!-- Etape 5 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: AR -->
+    <div id="view-ar" class="hidden flex gap-3 flex-1 overflow-hidden animate-fade-in">
+        <!-- LEFT: Form -->
+        <div class="glass rounded-xl p-4 w-[320px] flex flex-col">
+            <div class="section-label px-2 py-0.5 rounded-r mb-2">
+                <span class="text-[10px] font-semibold text-[#96c63e]">🔧 Configuration</span>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center justify-center text-center p-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3">
+                    <span class="text-2xl">✨</span>
+                </div>
+                <p class="text-gray-300 text-xs font-medium mb-1">Aucune configuration requise</p>
+                <p class="text-[10px] text-gray-500 italic">
+                    Le module utilisera votre signature Outlook existante pour les coordonnees.
+                </p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="mt-auto space-y-2">
+                <button onclick="generateModule('AR')" class="btn-ginger w-full py-2.5 rounded-xl text-xs font-bold">
+                    📦 1. Generer AccuseReception.bas
+                </button>
+                <!-- AR doesn't need session code necessarily, but we can keep it consistent or hide it -->
+                <div class="text-[10px] text-gray-500 text-center px-4">
+                    Pas besoin de code Session pour ce module.<br>Le rangement est integre a la macro.
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Tutorial AR -->
+        <div class="glass rounded-xl p-4 flex-1 flex flex-col overflow-hidden">
+            <h2 class="text-sm font-bold mb-3 text-center">📖 Installation Accuse Reception</h2>
+            <div class="tutorial-scroll flex-1 pr-2 space-y-4">
+
                 <div>
-                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1.5">
-                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 5 : Ajouter le bouton</span>
+                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1">
+                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 1 : Importation</span>
                     </div>
-                    <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
-                        <p>1. Allez dans <b class="text-white">Fichier > Options > Personnaliser le ruban</b></p>
-                        <p class="text-[9px] text-[#96c63e] pl-3 italic">Astuce : Pour le mettre dans la fenetre
-                            "Message", faites ceci depuis un Nouveau Message !</p>
-                        <p>2. A droite, choisissez l'onglet (ex: <b class="text-white">Accueil</b> ou <b
-                                class="text-white">Message</b>)</p>
-                        <p>3. Cliquez <b class="text-white">Nouveau groupe</b> → Renommez "Chrono"</p>
-                        <p>4. Liste "Choisir les commandes" (gauche) : choisissez <b class="text-white">Macros</b></p>
-                        <p>5. Selectionnez <span class="text-[#96c63e]">NouveauChrono</span></p>
-                        <p>6. Cliquez <b class="text-white">Ajouter >></b></p>
-                        <p>7. Cliquez <b class="text-white">Renommer</b> pour changer l'icone/nom</p>
-                        <p>8. Validez par <b class="text-white">OK</b></p>
+                    <div class="text-[11px] text-gray-300 pl-2 space-y-1">
+                        <p>1. Generez et sauvegardez le fichier <b>AccuseReception.bas</b>.</p>
+                        <p>2. Dans Outlook, faites <span class="kbd">Alt</span> + <span class="kbd">F11</span>.</p>
+                        <p>3. <b>Fichier > Importer</b> et choisissez le fichier.</p>
                     </div>
                 </div>
 
-                <!-- Etape 6 -->
                 <div>
-                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1.5">
-                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 6 : Terminer</span>
+                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1">
+                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 2 : Ajouter le bouton</span>
                     </div>
-                    <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
-                        <p>1. <b class="text-white">Fermez Outlook</b> completement</p>
-                        <p>2. <b class="text-white">Relancez Outlook</b></p>
-                        <p>3. ✅ Bouton <span class="text-[#96c63e]">NouveauChrono</span> dans le ruban !</p>
+                    <div class="text-[11px] text-gray-300 pl-2 space-y-1">
+                        <p>⚠️ <b>Important :</b> Ce bouton doit etre dans la fenetre de lecture/redaction.</p>
+                        <p>1. Ouvrez un mail recu (double-clic) ou faites "Repondre".</p>
+                        <p>2. <b>Fichier > Options > Personnaliser le ruban</b></p>
+                        <p>3. A droite, choisissez l'onglet <b>Message</b> (ou Accueil)</p>
+                        <p>4. Cliquez <b>Nouveau groupe</b> &rarr; Renommez "Outils"</p>
+                        <p>5. Liste "Choisir les commandes" : <b>Macros</b></p>
+                        <p>6. Selectionnez <b class="text-[#96c63e]">AccuseReception</b> &rarr; <b>Ajouter >></b></p>
+                        <p>7. Renommez (Icone/Nom) &rarr; Validez par <b>OK</b></p>
                     </div>
                 </div>
+
+                <div>
+                    <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1">
+                        <span class="text-[11px] font-bold text-[#96c63e]">Astuce</span>
+                    </div>
+                    <div class="text-[11px] text-gray-300 pl-2 space-y-1">
+                        <p>Lors de l'utilisation, une fenetre vous demandera s'il faut ranger le mail automatiquement.
+                            Si vous dites OUI, choisissez le dossier du projet.</p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
         window.addEventListener('pywebviewready', () => console.log('Ready'));
+
+        let currentMode = 'HOME';
+
+        function switchView(mode) {
+            currentMode = mode;
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-chrono').classList.add('hidden');
+            document.getElementById('view-ar').classList.add('hidden');
+            document.getElementById('btn-home').classList.remove('hidden');
+
+            if (mode === 'HOME') {
+                document.getElementById('view-home').classList.remove('hidden');
+                document.getElementById('btn-home').classList.add('hidden');
+            } else if (mode === 'CHRONO') {
+                document.getElementById('view-chrono').classList.remove('hidden');
+            } else if (mode === 'AR') {
+                document.getElementById('view-ar').classList.remove('hidden');
+            }
+        }
+
+        function goHome() { switchView('HOME'); }
 
         async function browseFolder() {
             try {
@@ -261,25 +405,35 @@
             } catch (e) { }
         }
 
-        function getData() {
+        function getData(type) {
             const data = {
+                toolType: type,
                 trigram: document.getElementById('trigram').value.trim().toUpperCase(),
                 chronoFile: document.getElementById('chronoFile').value.trim(),
-                chronoFolder: document.getElementById('chronoFolder').value.trim()
+                chronoFolder: document.getElementById('chronoFolder').value.trim(),
+                // Inputs manquants en mode AR (car inutiles)
+                userName: document.getElementById('userName') ? document.getElementById('userName').value.trim() : '',
+                userPhone: document.getElementById('userPhone') ? document.getElementById('userPhone').value.trim() : ''
             };
-            if (!data.trigram) { alert('Trigramme requis'); return null; }
-            if (!data.chronoFile) { alert('Fichier Excel requis'); return null; }
-            if (!data.chronoFolder) { alert('Dossier Chrono requis'); return null; }
+
+            // Validation specific
+            if (type === 'CHRONO') {
+                if (!data.trigram) { alert('Trigramme requis'); return null; }
+                if (!data.chronoFile) { alert('Fichier Excel requis'); return null; }
+                if (!data.chronoFolder) { alert('Dossier Chrono requis'); return null; }
+            }
+            // For AR, no validation needed
+
             return data;
         }
 
-        async function generateModule() {
-            const data = getData();
+        async function generateModule(type) {
+            const data = getData(type);
             if (!data) return;
             try {
                 const r = await pywebview.api.generate_module(data);
                 if (r.success) {
-                    alert('✅ 1. Module sauvegarde !\n\n➡️ Maintenant, cliquez sur le bouton "2. Copier ThisOutlookSession"');
+                    alert('✅ Module sauvegarde !');
                 } else if (r.error !== 'Annule') {
                     alert('❌ ' + r.error);
                 }
@@ -288,13 +442,13 @@
             }
         }
 
-        async function generateSession() {
-            const data = getData();
+        async function generateSession(type) {
+            const data = getData(type);
             if (!data) return;
             try {
                 const r = await pywebview.api.generate_session(data);
                 if (r.success) {
-                    alert('✅ 2. Code copie !\n\n➡️ Vous avez tout ce qu\'il faut.\nPassez a l\'ETAPE 2 du guide.');
+                    alert('✅ Code copie dans le presse-papier !');
                 } else {
                     alert('❌ ' + r.error);
                 }

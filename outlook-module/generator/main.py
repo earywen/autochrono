@@ -44,21 +44,32 @@ class Api:
         return None
     
     def generate_module(self, data):
-        """Generate ChronoCreator.bas module and save to file."""
+        """Generate separate VBA modules based on tool type."""
         try:
+            tool_type = data.get('toolType', 'CHRONO')
+            
             generator = ChronoCreatorGenerator(
-                trigram=data['trigram'],
-                chrono_file=data['chronoFile'],
-                chrono_folder=data['chronoFolder']
+                trigram=data.get('trigram', ''),
+                chrono_file=data.get('chronoFile', ''),
+                chrono_folder=data.get('chronoFolder', ''),
+                user_name=data.get('userName', ''),
+                user_phone=data.get('userPhone', '')
             )
             
-            code = generator.get_main_module()
+            if tool_type == 'CHRONO':
+                code = generator.get_chrono_module()
+                default_name = 'ChronoCreator.bas'
+            elif tool_type == 'AR':
+                code = generator.get_ar_module()
+                default_name = 'AccuseReception.bas'
+            else:
+                return {'success': False, 'error': 'Type de tool inconnu'}
             
             # Open save dialog
             result = self.window.create_file_dialog(
                 webview.SAVE_DIALOG,
                 directory='',
-                save_filename='ChronoCreator.bas',
+                save_filename=default_name,
                 file_types=('VBA Module (*.bas)', 'All Files (*.*)')
             )
             

@@ -1,0 +1,115 @@
+'===============================================================================
+' CODE POUR ThisOutlookSession
+' Alt+F11 > Double-cliquer sur ThisOutlookSession > Coller ce code
+'===============================================================================
+
+Option Explicit
+
+'===============================================================================
+' CONFIGURATION - MEMES VALEURS QUE DANS ChronoCreator
+'===============================================================================
+Private Const CHRONO_FOLDER As String = "\\serveur\partage\Chrono"
+
+'===============================================================================
+' Intercepte l'envoi de chaque mail
+' Si REF detectee -> archive automatiquement dans le dossier Chrono
+'===============================================================================
+Private Sub Application_ItemSend(ByVal Item As Object, Cancel As Boolean)
+    On Error Resume Next
+    
+    If TypeName(Item) <> "MailItem" Then Exit Sub
+    
+    Dim mailBody As String
+    Dim chronoNum As String
+    Dim folderPath As String
+    
+    mailBody = Left(Item.Body, 300)
+    
+    ' Chercher le pattern REF avec numero Chrono
+    chronoNum = ExtractChrono(mailBody)
+    
+    If Len(chronoNum) > 0 Then
+        folderPath = FindFolder(chronoNum)
+        If Len(folderPath) > 0 Then
+            SaveMail Item, folderPath
+        End If
+    End If
+End Sub
+
+'===============================================================================
+' Extrait le numero Chrono du texte
+'===============================================================================
+Private Function ExtractChrono(ByVal text As String) As String
+    Dim pos As Long
+    Dim i As Long
+    Dim numStr As String
+    
+    ' Chercher "N" suivi du symbole degre ou espace
+    pos = InStr(1, text, "N" & Chr(176), vbTextCompare)
+    If pos = 0 Then pos = InStr(1, text, "N ", vbTextCompare)
+    If pos = 0 Then Exit Function
+    
+    i = pos + 2
+    
+    Do While i <= Len(text) And Mid(text, i, 1) = " "
+        i = i + 1
+    Loop
+    
+    numStr = ""
+    Do While i <= Len(text) And IsNumeric(Mid(text, i, 1))
+        numStr = numStr & Mid(text, i, 1)
+        i = i + 1
+    Loop
+    
+    If Len(numStr) >= 4 Then
+        ExtractChrono = numStr
+    End If
+End Function
+
+'===============================================================================
+' Trouve le dossier Chrono
+'===============================================================================
+Private Function FindFolder(ByVal chronoNum As String) As String
+    On Error Resume Next
+    
+    Dim fso As Object
+    Dim folder As Object
+    Dim subfolder As Object
+    
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    If Not fso.FolderExists(CHRONO_FOLDER) Then Exit Function
+    
+    Set folder = fso.GetFolder(CHRONO_FOLDER)
+    
+    For Each subfolder In folder.SubFolders
+        If Left(subfolder.Name, Len(chronoNum)) = chronoNum Then
+            FindFolder = subfolder.Path
+            Exit Function
+        End If
+    Next
+    
+    Set fso = Nothing
+End Function
+
+'===============================================================================
+' Sauvegarde le mail
+'===============================================================================
+Private Sub SaveMail(ByVal mailItem As Object, ByVal folderPath As String)
+    On Error Resume Next
+    
+    Dim fileName As String
+    Dim fullPath As String
+    Dim c As Variant
+    
+    fileName = mailItem.Subject
+    For Each c In Array("<", ">", ":", """", "/", "\", "|", "?", "*")
+        fileName = Replace(fileName, c, "_")
+    Next c
+    If Len(fileName) > 50 Then fileName = Left(fileName, 50)
+    If Len(fileName) = 0 Then fileName = "mail"
+    
+    fullPath = folderPath & "\" & fileName & ".msg"
+    
+    mailItem.SaveAs fullPath, 3  ' olMSG = 3
+End Sub

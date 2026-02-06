@@ -26,15 +26,16 @@
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(20px);
+            background: rgba(23, 37, 84, 0.95);
+            /* Dark blue solid fallback */
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Removing expensive blur for better performance */
         .glass-input {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.2s;
+            transition: border-color 0.2s;
         }
 
         .glass-input:focus {
@@ -141,6 +142,19 @@
 
     <!-- VIEW: HOME -->
     <div id="view-home" class="flex-1 flex flex-col items-center justify-center gap-6 animate-fade-in">
+
+        <!-- Quality Approved Badge (Top Center) -->
+        <div
+            class="flex items-center gap-4 bg-white/5 backdrop-blur-sm px-5 py-3 rounded-full border border-[#96c63e]/20 mb-4 transform hover:scale-105 transition-all cursor-default">
+            <div class="text-right">
+                <p class="text-xs font-bold text-[#96c63e] leading-tight">Quality<br>Approved!</p>
+            </div>
+            <div
+                class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#96c63e] shadow-[0_0_15px_rgba(150,198,62,0.3)]">
+                <img src="ecou.jpg" alt="Quality" class="w-full h-full object-cover">
+            </div>
+        </div>
+
         <div class="text-center">
             <h2 class="text-lg font-semibold mb-1">Quel outil souhaitez-vous installer ?</h2>
             <p class="text-gray-400 text-xs">Selectionnez un module pour generer son installateur VBA.</p>
@@ -163,7 +177,7 @@
             <!-- Card AR -->
             <div onclick="switchView('AR')"
                 class="glass card-hover rounded-xl p-6 flex-1 flex flex-col items-center justify-center gap-4 transition-all duration-300">
-                <div class="w-16 h-16 rounded-full bg-[#96c63e]/20 flex items-center justify-center text-3xl">
+                <div class="w-16 h-16 rounded-full bg-[#96c63e]/20 flex items-center justify-center text-3xl pr-1">
                     📨
                 </div>
                 <div class="text-center">
@@ -174,6 +188,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Quality Approved Badge -->
+
 
     <!-- VIEW: CHRONO -->
     <div id="view-chrono" class="hidden flex gap-3 flex-1 overflow-hidden animate-fade-in">

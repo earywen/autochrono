@@ -164,17 +164,12 @@
                     </div>
                     <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
                         <p>1. Remplissez votre <b class="text-white">Trigramme</b> (ex: LABR)</p>
-                        <p>2. Cliquez 📄 → Allez sur le <b class="text-white">serveur</b></p>
-                        <p class="text-gray-400 pl-3">→ Cherchez le fichier <span class="text-[#96c63e]">Chrono
-                                2026.xlsx</span></p>
-                        <p class="text-gray-400 pl-3 text-[10px]">(ou l'annee en cours)</p>
-                        <p>3. Cliquez 📂 → Allez sur le <b class="text-white">serveur</b></p>
-                        <p class="text-gray-400 pl-3">→ Selectionnez le dossier <span class="text-[#96c63e]">Chrono
-                                2026</span></p>
-                        <p class="text-gray-400 pl-3 text-[10px]">(ou l'annee en cours)</p>
-                        <p>4. Cliquez <span class="text-[#96c63e]">Sauvegarder ChronoCreator.bas</span></p>
+                        <p>2. Selectionnez les fichiers <b class="text-white">Excel</b> et <b
+                                class="text-white">Dossier</b> sur le serveur</p>
+                        <p>3. Cliquez <span class="text-[#96c63e]">1. Sauvegarder ChronoCreator.bas</span></p>
                         <p class="text-gray-400 pl-3">→ Enregistrez sur votre Bureau</p>
-                        <p>5. Cliquez <span class="text-[#96c63e]">Copier ThisOutlookSession</span></p>
+                        <p>4. Cliquez <span class="text-white">2. Copier ThisOutlookSession</span></p>
+                        <p class="text-gray-400 pl-3">→ Le code est copie dans le presse-papier</p>
                     </div>
                 </div>
 
@@ -196,8 +191,7 @@
                     </div>
                     <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
                         <p>1. <b class="text-white">Fichier</b> → <b class="text-white">Importer un fichier...</b></p>
-                        <p>2. Selectionnez <span class="text-[#96c63e]">ChronoCreator.bas</span></p>
-                        <p>3. Cliquez <b class="text-white">Ouvrir</b></p>
+                        <p>2. Selectionnez <b class="text-[#96c63e]">ChronoCreator.bas</b> (sur votre Bureau)</p>
                     </div>
                 </div>
 
@@ -218,19 +212,20 @@
                 <!-- Etape 5 -->
                 <div>
                     <div class="bg-[#96c63e]/20 rounded-lg px-2 py-1 mb-1.5">
-                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 5 : Ajouter bouton au ruban</span>
+                        <span class="text-[11px] font-bold text-[#96c63e]">ETAPE 5 : Ajouter le bouton</span>
                     </div>
                     <div class="text-gray-300 space-y-0.5 text-[11px] pl-2">
-                        <p>1. Ouvrez un <b class="text-white">Nouveau message</b> (important !)</p>
-                        <p>2. <b class="text-white">Fichier</b> → <b class="text-white">Options</b> → <b
-                                class="text-white">Personnaliser le ruban</b></p>
-                        <p>3. Verifiez que <b class="text-white">Nouveau courrier</b> est selectionne a droite</p>
-                        <p>4. Cliquez <b class="text-white">Nouveau groupe</b> → Renommez "Chrono"</p>
-                        <p>5. Liste "Choisir les commandes" (gauche) : choisissez <b class="text-white">Macros</b></p>
-                        <p>6. Selectionnez <span class="text-[#96c63e]">NouveauChrono</span></p>
-                        <p>7. Cliquez <b class="text-white">Ajouter >></b></p>
-                        <p>8. Cliquez <b class="text-white">Renommer</b> pour changer l'icone/nom</p>
-                        <p>9. Validez par <b class="text-white">OK</b> (fermez les options et le message)</p>
+                        <p>1. Allez dans <b class="text-white">Fichier > Options > Personnaliser le ruban</b></p>
+                        <p class="text-[9px] text-[#96c63e] pl-3 italic">Astuce : Pour le mettre dans la fenetre
+                            "Message", faites ceci depuis un Nouveau Message !</p>
+                        <p>2. A droite, choisissez l'onglet (ex: <b class="text-white">Accueil</b> ou <b
+                                class="text-white">Message</b>)</p>
+                        <p>3. Cliquez <b class="text-white">Nouveau groupe</b> → Renommez "Chrono"</p>
+                        <p>4. Liste "Choisir les commandes" (gauche) : choisissez <b class="text-white">Macros</b></p>
+                        <p>5. Selectionnez <span class="text-[#96c63e]">NouveauChrono</span></p>
+                        <p>6. Cliquez <b class="text-white">Ajouter >></b></p>
+                        <p>7. Cliquez <b class="text-white">Renommer</b> pour changer l'icone/nom</p>
+                        <p>8. Validez par <b class="text-white">OK</b></p>
                     </div>
                 </div>
 
@@ -284,7 +279,7 @@
             try {
                 const r = await pywebview.api.generate_module(data);
                 if (r.success) {
-                    alert('✅ Fichier sauvegarde !\n\n→ Passez a l\'ETAPE 2');
+                    alert('✅ 1. Module sauvegarde !\n\n➡️ Maintenant, cliquez sur le bouton "2. Copier ThisOutlookSession"');
                 } else if (r.error !== 'Annule') {
                     alert('❌ ' + r.error);
                 }
@@ -299,7 +294,7 @@
             try {
                 const r = await pywebview.api.generate_session(data);
                 if (r.success) {
-                    alert('✅ Code copie !\n\n→ Passez a l\'ETAPE 4 pour le coller');
+                    alert('✅ 2. Code copie !\n\n➡️ Vous avez tout ce qu\'il faut.\nPassez a l\'ETAPE 2 du guide.');
                 } else {
                     alert('❌ ' + r.error);
                 }

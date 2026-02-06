@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChronoCreator Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        body {
+            background: linear-gradient(135deg, #152845 0%, #1c365b 50%, #2a4a75 100%);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.2s;
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(150, 198, 62, 0.6);
+            box-shadow: 0 0 10px rgba(150, 198, 62, 0.2);
+            outline: none;
+        }
+
+        .btn-ginger {
+            background: linear-gradient(135deg, #96c63e 0%, #7ab32e 100%);
+            color: #1c365b;
+            transition: all 0.2s;
+        }
+
+        .btn-ginger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(150, 198, 62, 0.3);
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(150, 198, 62, 0.4);
+            color: #96c63e;
+            transition: all 0.2s;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(150, 198, 62, 0.1);
+        }
+
+        .section-label {
+            background: linear-gradient(90deg, rgba(150, 198, 62, 0.15) 0%, transparent 100%);
+            border-left: 2px solid #96c63e;
+        }
+    </style>
+</head>
+
+<body class="text-white p-3 flex flex-col h-full">
+    <!-- Header -->
+    <div class="text-center mb-3">
+        <h1 class="text-xl font-bold">
+            <span class="text-white">Chrono</span><span class="text-[#96c63e]">Creator</span>
+        </h1>
+        <p class="text-gray-400 text-[10px]">Generateur de module Outlook</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="glass rounded-xl p-4 flex-1 flex flex-col">
+        <!-- User -->
+        <div class="section-label px-2 py-0.5 rounded-r mb-2">
+            <span class="text-[10px] font-semibold text-[#96c63e]">👤 Utilisateur</span>
+        </div>
+        <div class="mb-3">
+            <label class="block text-[10px] text-gray-400 mb-0.5">Trigramme</label>
+            <input type="text" id="trigram" placeholder="Ex: ARME"
+                class="glass-input w-full px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500 uppercase">
+        </div>
+
+        <!-- Paths -->
+        <div class="section-label px-2 py-0.5 rounded-r mb-2">
+            <span class="text-[10px] font-semibold text-[#96c63e]">📁 Chemins reseau</span>
+        </div>
+        <div class="mb-2">
+            <label class="block text-[10px] text-gray-400 mb-0.5">Fichier Excel Chrono</label>
+            <div class="flex gap-1">
+                <input type="text" id="chronoFile" placeholder="\\serveur\partage\Chrono 2026.xlsx"
+                    class="glass-input flex-1 px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500">
+                <button onclick="browseFile()" class="btn-ghost px-2 py-1.5 rounded-lg text-[10px]">📄</button>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label class="block text-[10px] text-gray-400 mb-0.5">Dossier Chrono</label>
+            <div class="flex gap-1">
+                <input type="text" id="chronoFolder" placeholder="\\serveur\partage\Chrono"
+                    class="glass-input flex-1 px-2 py-1.5 rounded-lg text-xs text-white placeholder-gray-500">
+                <button onclick="browseFolder()" class="btn-ghost px-2 py-1.5 rounded-lg text-[10px]">📂</button>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-auto space-y-1.5">
+            <button onclick="generateModule()" class="btn-ginger w-full py-2 rounded-xl text-xs font-bold">
+                📦 1. Sauvegarder ChronoCreator.bas
+            </button>
+            <button onclick="generateSession()"
+                class="btn-ghost w-full py-2 rounded-xl text-xs font-semibold border-[#96c63e]">
+                📋 2. Copier ThisOutlookSession
+            </button>
+            <button onclick="showInstructions()" class="btn-ghost w-full py-1 rounded-lg text-[10px] opacity-70">
+                📖 Comment utiliser ?
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="instructionsModal"
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="glass rounded-xl p-4 max-w-xs mx-3">
+            <h2 class="text-sm font-bold mb-2">📖 Instructions</h2>
+            <div class="text-gray-300 space-y-1 text-[10px]">
+                <p><span class="text-[#96c63e]">1.</span> Remplissez les champs ci-dessus</p>
+                <p><span class="text-[#96c63e]">2.</span> Cliquez "Generer le code VBA"</p>
+                <p><span class="text-[#96c63e]">3.</span> Ouvrir Outlook > Alt+F11</p>
+                <p><span class="text-[#96c63e]">4.</span> Fichier > Importer fichier</p>
+                <p><span class="text-[#96c63e]">5.</span> Collez aussi le code dans ThisOutlookSession</p>
+                <p><span class="text-[#96c63e]">6.</span> Redemarrez Outlook</p>
+            </div>
+            <button onclick="closeInstructions()"
+                class="btn-ginger w-full py-1.5 rounded-lg text-xs font-bold mt-3">Fermer</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('pywebviewready', () => console.log('Ready'));
+
+        async function browseFolder() {
+            try {
+                const r = await pywebview.api.browse_folder();
+                if (r) document.getElementById('chronoFolder').value = r;
+            } catch (e) { }
+        }
+
+        async function browseFile() {
+            try {
+                const r = await pywebview.api.browse_file();
+                if (r) document.getElementById('chronoFile').value = r;
+            } catch (e) { }
+        }
+
+        function getData() {
+            const data = {
+                trigram: document.getElementById('trigram').value.trim().toUpperCase(),
+                chronoFile: document.getElementById('chronoFile').value.trim(),
+                chronoFolder: document.getElementById('chronoFolder').value.trim()
+            };
+            if (!data.trigram) { alert('Trigramme requis'); return null; }
+            if (!data.chronoFile) { alert('Fichier Excel requis'); return null; }
+            if (!data.chronoFolder) { alert('Dossier Chrono requis'); return null; }
+            return data;
+        }
+
+        async function generateModule() {
+            const data = getData();
+            if (!data) return;
+            try {
+                const r = await pywebview.api.generate_module(data);
+                if (r.success) {
+                    alert('✅ Fichier sauvegarde !\n\n→ Alt+F11 > Fichier > Importer > ' + r.path);
+                } else if (r.error !== 'Annule') {
+                    alert('❌ ' + r.error);
+                }
+            } catch (e) {
+                alert('❌ ' + e.message);
+            }
+        }
+
+        async function generateSession() {
+            const data = getData();
+            if (!data) return;
+            try {
+                const r = await pywebview.api.generate_session(data);
+                if (r.success) {
+                    alert('✅ Code ThisOutlookSession copie !\n\n→ Double-clic ThisOutlookSession > Ctrl+V');
+                } else {
+                    alert('❌ ' + r.error);
+                }
+            } catch (e) {
+                alert('❌ ' + e.message);
+            }
+        }
+
+        function showInstructions() {
+            document.getElementById('instructionsModal').classList.remove('hidden');
+            document.getElementById('instructionsModal').classList.add('flex');
+        }
+
+        function closeInstructions() {
+            document.getElementById('instructionsModal').classList.add('hidden');
+            document.getElementById('instructionsModal').classList.remove('flex');
+        }
+
+        document.getElementById('instructionsModal').addEventListener('click', e => {
+            if (e.target.id === 'instructionsModal') closeInstructions();
+        });
+    </script>
+</body>
+
+</html>

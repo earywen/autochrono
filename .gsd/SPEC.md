@@ -4,73 +4,66 @@
 
 ## Vision
 
-AutoChrono est un outil de productivité pour automatiser le rangement des mails envoyés aux clients selon la procédure qualité de l'entreprise. Il génère un module VBA personnalisé pour Outlook qui détecte automatiquement les mails contenant une référence Chrono et propose de les archiver dans le dossier approprié sur le serveur.
+OutlookToolGen est un outil de productivité unifié pour automatiser l'envoi et la gestion de mails (Archivage Chrono + Accusé de Réception) selon la procédure qualité de l'entreprise. L'objectif est de fournir une interface "idiot-proof" générant un unique code VBA (`ThisOutlookSession`) fusionnant toutes les fonctionnalités sans risque de conflit.
 
 ## Goals
 
-1. **Simplifier la configuration** — Une interface graphique permet à chaque utilisateur de configurer ses paramètres (trigramme, chemins) sans modifier de code
-2. **Générer du VBA personnalisé** — Produire un fichier `.bas` importable dans Outlook avec les valeurs personnalisées intégrées
-3. **Automatiser l'archivage** — Le VBA détecte les mails Chrono à l'envoi et les sauvegarde automatiquement dans le bon dossier
+1. **Interface Unifiée** — L'utilisateur configure en une seule fois son Trigramme, le nom du Chef de Projet/Téléphone et les chemins des dossiers. Plus besoin de naviguer entre plusieurs outils.
+2. **Génération Full-Session VBA** — Produire un seul fichier texte/code contenant "ThisOutlookSession" gérant simultanément :
+    - La détection et le classement automatique des mails "Chrono".
+    - Le suivi et le classement des "Accusés de Réception".
+3. **Zéro Conflit** — Garantir qu'Outlook n'a qu'un seul événement `Application_ItemSend` correctement écrit pour gérer toutes les macros.
 
 ## Non-Goals (Out of Scope)
 
-- Modification automatique des macros Outlook (nécessite droits admin)
-- Mise à jour du fichier Excel Chrono
-- Gestion multi-années automatique
-- Notifications après rangement
+- Modification automatique des macros Outlook en arrière-plan (nécessite droits admin).
+- Mise à jour automatique des fichiers de l'entreprise (Excel, etc.) en écriture, sauf ajout d'une ligne pour les nouveaux chronos.
+- Applications séparées pour Chrono et AR (Elles sont désormais fusionnées).
 
 ## Users
 
-**Employés du secrétariat/bureau** qui envoient régulièrement des offres et rapports aux clients et doivent respecter la procédure qualité d'archivage des mails.
+**Employés du secrétariat/bureau et Chefs de Projet** qui souhaitent respecter la procédure qualité d'archivage des mails de manière transparente et sans compétences informatiques.
 
 ## Constraints
 
-- **Pas de droits admin** — L'import VBA doit être manuel avec instructions claires
-- **Environnement entreprise** — L'exécutable doit être "safe" et ne pas déclencher d'alertes antivirus
-- **Fichier Excel partagé** — Doit pouvoir lire le fichier même s'il est ouvert par quelqu'un d'autre (lecture seule)
-- **Colonnes Excel inconnues** — Les positions des colonnes doivent être configurables
+- **Pas de droits admin** — L'import VBA se fait via copier/coller manuel instruit par l'application.
+- **Conflits d'événements Outlook** — Outlook ne supportant pas plusieurs `ItemSend`, le code généré *doit* tout encapsuler.
+- **Environnement entreprise partagé** — Fichiers Excel partagés (lecture de préférence).
 
 ## Technical Decisions
 
 | Décision | Choix | Justification |
 |----------|-------|---------------|
 | Langage | Python 3.x | Simple, portable |
-| GUI | CustomTkinter | UI moderne, dark mode, look professionnel |
-| Packaging | PyInstaller | Génère un .exe standalone sans installation Python |
-| Output | Fichier .bas | Format standard pour import VBA dans Outlook |
+| GUI | PyWebView + HTML/Tailwind | Interface web moderne, intuitive, look professionnel |
+| Packaging | PyInstaller | Génère un `.exe` standalone portable |
+| Output | Code presse-papier | Directement collable dans `ThisOutlookSession`, supprimant le besoin d'installer des `.bas` multiples |
 
 ## Functional Requirements
 
-### Application GUI (Python)
+### Application GUI (Python/HTML)
 
 | ID | Requirement |
 |----|-------------|
-| GUI-01 | Afficher un formulaire avec champs : Trigramme, Dossier Chrono, Fichier Excel Chrono |
-| GUI-02 | Permettre la navigation fichier/dossier avec boutons "Parcourir" |
-| GUI-03 | Afficher les champs pour les numéros de colonnes Excel (Chrono, Client, Trigramme) |
-| GUI-04 | Valider les entrées (champs non vides, chemins existants) |
-| GUI-05 | Générer le fichier .bas avec les valeurs saisies |
-| GUI-06 | Afficher un message de succès avec le chemin du fichier généré |
-| GUI-07 | Inclure un bouton pour afficher les instructions d'import Outlook |
+| GUI-01 | Afficher un unique formulaire regroupant : Trigramme, Nom, Tél, Dossier Chrono, Fichier Excel Chrono |
+| GUI-02 | Validation stricte des données avant génération |
+| GUI-03 | Un seul bouton "Générer le Code Outlook" |
+| GUI-04 | Remplacer la vue par onglets par une vue simple de bout en bout |
+| GUI-05 | Afficher clairement les 3 étapes d'installation (Copier -> Alt+F11 -> Coller) après génération |
 
-### Module VBA Généré
+### Module VBA Généré (Fusionné)
 
 | ID | Requirement |
 |----|-------------|
-| VBA-01 | S'accrocher à l'événement `Application.ItemSend` |
-| VBA-02 | Détecter le pattern `REF : ... - N°XXXXX` dans les 100 premiers caractères du corps du mail |
-| VBA-03 | Parser le pattern avec tolérance aux espaces variables autour des tirets |
-| VBA-04 | Afficher une modale "Voulez-vous ranger ce mail dans le dossier Chrono ?" |
-| VBA-05 | Si Oui : ouvrir le fichier Excel en lecture seule |
-| VBA-06 | Trouver la dernière ligne remplie et extraire : numéro chrono, client, trigramme |
-| VBA-07 | Créer le dossier `{chrono} - {client} ({trigramme})` s'il n'existe pas |
-| VBA-08 | Sauvegarder le mail en `.msg` dans ce dossier |
-| VBA-09 | Envoyer le mail normalement (que l'utilisateur ait dit Oui ou Non) |
+| VBA-01 | Encapsuler toute la logique dans un seul bloc `Private Sub Application_ItemSend` |
+| VBA-02 | *Chrono* : Détecter le pattern `REF...N°` et proposer l'archivage |
+| VBA-03 | *Chrono* : Lire le fichier Excel Excel défini et générer/trouver les dossiers Chrono |
+| VBA-04 | *AR* : Détecter le flag `ActionAR` et proposer l'archivage avec `BrowseForFolder` |
+| VBA-05 | Fournir la macro autonome `NouveauChrono` en complément dans le même texte pour l'assignation clavier |
+| VBA-06 | Fournir la macro autonome `AccuseReception` dans ce même texte |
 
 ## Success Criteria
 
-- [ ] L'exécutable génère un fichier .bas valide avec les paramètres personnalisés
-- [ ] Le fichier .bas s'importe correctement dans Outlook VBA
-- [ ] À l'envoi d'un mail avec "REF : ... - N°XXXXX", une modale apparaît
-- [ ] Si accepté, le mail est sauvegardé dans le bon dossier avec le bon nom
-- [ ] Le mail est envoyé normalement dans tous les cas
+- L'interface ne présente plus de choix entre Chrono et AR. Elle demande toutes les variables nécessaires d'un coup.
+- Le Python génère un code VBA robuste qui s'exécute sans erreur de compilation dans Outlook.
+- Le code fusionné gère correctement l'interception au moment de l'envoi du mail (ItemSend) pour les deux cas d'usage simultanément.

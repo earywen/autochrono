@@ -1,0 +1,21 @@
+Madame, monsieur,
+
+Nous avons bien reçu votre commande concernant la mission citée en objet et nous vous en remercions.
+J’aurai le plaisir d’être le chef de votre projet.
+
+Les principaux intervenants seront les suivants :
+
+Fonction	Prénom - Nom	Téléphone	Courriel
+Chef du projet	[Prénom NOM]	[N° direct]	@groupeginger.com
+Superviseur	[Prénom NOM]	[N° standard]	@groupeginger.com
+
+Le planning de notre intervention est le suivant :
+• Nous lançons dès à présent les DICT et les recherches historiques.
+• Les travaux sur site seront réalisés fin [semaine XX / début semaine XX].
+• Les résultats de l’étude vous seront remis [début février (semaine XX)].
+
+Comme précisé dans notre offre nous vous remercions de nous adresser en retour :
+•	Le Relevé Technique Amiante avant Travaux (RAT) ;
+•	Le plan des réseaux internes.
+
+Cordialement,

@@ -1,108 +1,93 @@
-"""
-ChronoCreator Generator - Main entry point with PyWebView
-"""
-
-import webview
-import os
+import logging
 import sys
+import os
+import webview
+import warnings
 
-sys.setrecursionlimit(500)
+# Configure logging globally
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-from vba_generator import ChronoCreatorGenerator
+# Suppress noisy libraries that might cause recursion errors in logs
+logging.getLogger('pywebview').setLevel(logging.WARNING)
+logging.getLogger('clr').setLevel(logging.WARNING)
+logging.getLogger('pythonnet').setLevel(logging.WARNING)
 
+print("--- STARTING OUTLOOK TOOL GEN ---")
+
+# Fix for RecursionError: Disable WebView2 Accessibility features which cause infinite loops
+os.environ["WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS"] = "--disable-features=Accessibility"
+sys.setrecursionlimit(1000)
+
+from vba_generator import UnifiedVBAGenerator
 
 class Api:
     """Python API exposed to JavaScript."""
     
     def __init__(self, window=None):
-        self.window = window
+        self._window = window
+        logger.debug("Api initialized")
     
     def set_window(self, window):
-        self.window = window
+        self._window = window
     
     def browse_folder(self):
         """Open folder selection dialog."""
-        result = self.window.create_file_dialog(
-            webview.FOLDER_DIALOG,
-            directory='',
-            allow_multiple=False
-        )
-        if result and len(result) > 0:
-            return result[0]
-        return None
+        logger.info("Opening folder dialog...")
+        try:
+            result = self._window.create_file_dialog(
+                webview.FOLDER_DIALOG,
+                directory='',
+                allow_multiple=False
+            )
+            if result and len(result) > 0:
+                return result[0]
+            return None
+        except Exception as e:
+            logger.error(f"Error in browse_folder: {e}", exc_info=True)
+            return None
     
     def browse_file(self):
         """Open file selection dialog for Excel files."""
-        result = self.window.create_file_dialog(
-            webview.OPEN_DIALOG,
-            directory='',
-            allow_multiple=False,
-            file_types=('Excel Files (*.xlsx;*.xls)', 'All Files (*.*)')
-        )
-        if result and len(result) > 0:
-            return result[0]
-        return None
-    
-    def generate_module(self, data):
-        """Generate separate VBA modules based on tool type."""
+        logger.info("Opening file dialog...")
         try:
-            tool_type = data.get('toolType', 'CHRONO')
-            
-            generator = ChronoCreatorGenerator(
+            result = self._window.create_file_dialog(
+                webview.OPEN_DIALOG,
+                directory='',
+                allow_multiple=False,
+                file_types=('Excel Files (*.xlsx;*.xls)', 'All Files (*.*)')
+            )
+            if result and len(result) > 0:
+                return result[0]
+            return None
+        except Exception as e:
+            logger.error(f"Error in browse_file: {e}", exc_info=True)
+            return None
+
+    def generate_unified_session(self, data):
+        """Genere le code unifie pour ThisOutlookSession et le copie dans le presse-papier."""
+        try:
+            logger.info("Generating Unified Session Code")
+            generator = UnifiedVBAGenerator(
                 trigram=data.get('trigram', ''),
                 chrono_file=data.get('chronoFile', ''),
-                chrono_folder=data.get('chronoFolder', ''),
-                user_name=data.get('userName', ''),
-                user_phone=data.get('userPhone', '')
+                chrono_folder=data.get('chronoFolder', '')
             )
             
-            if tool_type == 'CHRONO':
-                code = generator.get_chrono_module()
-                default_name = 'ChronoCreator.bas'
-            elif tool_type == 'AR':
-                code = generator.get_ar_module()
-                default_name = 'AccuseReception.bas'
-            else:
-                return {'success': False, 'error': 'Type de tool inconnu'}
+            code = generator.get_unified_session_module()
             
-            # Open save dialog
-            result = self.window.create_file_dialog(
-                webview.SAVE_DIALOG,
-                directory='',
-                save_filename=default_name,
-                file_types=('VBA Module (*.bas)', 'All Files (*.*)')
-            )
-            
-            if result:
-                # result can be tuple or string depending on platform
-                filepath = result[0] if isinstance(result, tuple) else result
-                with open(filepath, 'w', encoding='utf-8') as f:
-                    f.write(code)
-                return {'success': True, 'path': filepath}
-            else:
-                return {'success': False, 'error': 'Annule'}
-        
-        except Exception as e:
-            return {'success': False, 'error': str(e)}
-    
-    def generate_session(self, data):
-        """Generate ThisOutlookSession code."""
-        try:
-            generator = ChronoCreatorGenerator(
-                trigram=data['trigram'],
-                chrono_file=data['chronoFile'],
-                chrono_folder=data['chronoFolder']
-            )
-            
-            code = generator.get_session_module()
+            # Copie dans le presse papier
             self._copy_to_clipboard(code)
-            return {'success': True, 'type': 'session'}
-        
+            
+            return {'success': True}
+            
         except Exception as e:
+            logger.error(f"Error generating session: {e}", exc_info=True)
             return {'success': False, 'error': str(e)}
-    
+            
     def _copy_to_clipboard(self, text):
         """Copy text to clipboard."""
+        logger.debug(f"Copying {len(text)} chars to clipboard")
         try:
             import pyperclip
             pyperclip.copy(text)
@@ -123,30 +108,40 @@ def get_html_path():
 
 
 def main():
-    """Launch the ChronoCreator Generator application."""
-    import warnings
-    import logging
+    """Launch the OutlookToolGen application."""
+    print("--- APPLICATION STARTING ---") 
     warnings.filterwarnings('ignore')
-    logging.getLogger('pywebview').setLevel(logging.CRITICAL)
     
-    api = Api()
-    
-    html_path = get_html_path()
-    
-    window = webview.create_window(
-        title='ChronoCreator Generator',
-        url=html_path,
-        width=900,
-        height=580,
-        resizable=True,
-        js_api=api,
-        background_color='#1c365b'
-    )
-    
-    api.set_window(window)
-    
-    webview.start(gui='edgechromium', debug=False)
-
+    try:
+        api = Api()
+        
+        html_path = get_html_path()
+        logger.info(f"Starting application with HTML: {html_path}")
+        
+        window = webview.create_window(
+            title='Outlook Tool Gen (Unified)',
+            url=html_path,
+            width=950,
+            height=700,
+            resizable=True,
+            js_api=api,
+            background_color='#1c365b'
+        )
+        
+        api.set_window(window)
+        
+        logger.info("Window created, starting webview...")
+        webview.start(debug=True, http_server=True)
+        
+    except Exception as e:
+        logger.exception("Critical error during startup")
+        input("Press Enter to exit...")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"FATAL: {e}")
+        import traceback
+        traceback.print_exc()
+        input("Press Enter to exit...")

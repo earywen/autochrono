@@ -1,24 +1,19 @@
-# STATE.md — Project Memory
+# STATE.md
 
-> **Last Updated**: 2026-02-04
+> **Updated**: 2026-02-20
+> **Current Phase**: Phase 4: Integration & Tests (Completed)
+> **Goal**: Unify the OutlookToolGen to output a single "idiot-proof" VBA session code.
 
-## Current Position
-
-- **Phase**: 1 (Complete)
-- **Task**: GUI and VBA generator implemented
-- **Status**: Ready for testing
-
-## What Was Just Accomplished
-
-- Created Python project structure with CustomTkinter
-- Implemented GUI with form fields and validation
-- Created VBA generator with embedded template
-- Verified GUI runs correctly
-- Committed all changes
+## Current Status
+- [x] Rewrote `SPEC.md` and `ROADMAP.md` to target a unified architecture.
+- [x] Refactored `vba_generator.py` into a single `UnifiedVBAGenerator` class.
+- [x] Redesigned `index.html` to remove tabs and feature a single scrollable form.
+- [x] Updated `main.py` to expose only one API endpoint `generate_unified_session`.
+- [x] Successfully compiled the project using PyInstaller (`Generator.spec`).
 
 ## Next Steps
+- Manual User testing of the generated VBA within an Outlook environment.
+- Potential release tag of v2.0 for the unified generator.
 
-1. Run `python src/main.py` to test GUI
-2. Generate a .bas file and verify contents
-3. Build with `pyinstaller --onefile --windowed src/main.py`
-4. Test .bas import in Outlook (when at office)
+## Notes
+- The application now only copies to clipboard. No more `.bas` file exports are supported in order to simplify the process significantly.

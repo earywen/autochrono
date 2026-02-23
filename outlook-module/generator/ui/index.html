@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outlook Tool Generator</title>
+    <title>BUMP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -20,7 +20,7 @@
             height: 100%;
             background: linear-gradient(135deg, #152845 0%, #1c365b 50%, #2a4a75 100%);
             color: white;
-            overflow-y: auto;
+            overflow: hidden;
         }
 
         .glass {
@@ -82,11 +82,28 @@
 <body class="p-4 flex flex-col items-center">
 
     <!-- Header -->
-    <div class="text-center w-full mb-6 relative">
-        <h1 class="text-2xl font-bold">
-            <span class="text-white">Outlook</span><span class="text-[#96c63e]">ToolGen</span>
-        </h1>
-        <p class="text-gray-300 text-xs mt-1">Générateur d'outils unifié pour Outlook (Chronos & AR)</p>
+    <div class="flex justify-between items-center w-full max-w-5xl mb-6 relative px-4">
+        <div class="flex-1"></div>
+        <div class="text-center flex-1">
+            <h1 class="text-3xl font-bold tracking-widest">
+                <span class="text-white">BU</span><span class="text-[#96c63e]">MP</span>
+            </h1>
+            <p class="text-gray-300 text-[10px] mt-1 uppercase tracking-wider">Burgeap Unified Mail Process</p>
+        </div>
+        <div class="flex-1 flex justify-end">
+            <!-- Quality Approved Badge -->
+            <div
+                class="flex items-center gap-3 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-[#96c63e]/20 transform hover:scale-105 transition-all cursor-default shadow-lg">
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-wider font-bold text-[#96c63e] leading-tight">
+                        Quality<br>Approved</p>
+                </div>
+                <div
+                    class="relative w-11 h-11 rounded-full overflow-hidden border-2 border-[#96c63e] shadow-[0_0_15px_rgba(150,198,62,0.3)]">
+                    <img src="ecou.jfif" alt="Quality" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="flex flex-row gap-4 w-full h-[calc(100vh-100px)] max-w-5xl">
@@ -143,10 +160,20 @@
             </div>
         </div>
 
-        <!-- RIGHT: Unified Tutorial -->
+        <!-- RIGHT: Tutorial -->
         <div class="glass rounded-xl p-5 flex-1 flex flex-col relative">
-            <div class="absolute top-4 right-4 bg-[#96c63e]/20 text-[#96c63e] text-[10px] font-bold px-2 py-1 rounded">
-                Version Unifiée
+
+            <h2 class="text-sm font-bold mb-3 border-b border-white/10 pb-2">🌟 À quoi sert cet outil ?</h2>
+            <div class="text-xs text-gray-300 space-y-2 mb-6">
+                <p>BUMP installe des macros très pratiques sur votre messagerie :</p>
+                <ul class="list-disc pl-4 space-y-1 text-gray-400">
+                    <li><b class="text-white">Gestion des Chronos :</b> Un bouton permet de réserver automatiquement vos
+                        numéros Chrono dans votre fichier Excel. Le code assure aussi <b>l'archivage automatique</b> des
+                        mails envoyés pour ce Chrono.</li>
+                    <li><b class="text-white">Accusés de Réception :</b> Un bouton permet de rédiger en 1 clic un AR de
+                        commande standardisé, et déclenchera <b>l'archivage automatique</b> du mail envoyé sur le
+                        serveur.</li>
+                </ul>
             </div>
 
             <h2 class="text-sm font-bold mb-4 border-b border-white/10 pb-2">📖 Installation dans Outlook</h2>
@@ -220,7 +247,8 @@
                                 <li>1. Ouvrez un message (ou créez-en un nouveau) pour afficher le ruban "Message".</li>
                                 <li>2. Refaites la même opération (Options > Personnaliser le ruban).</li>
                                 <li>3. Créez un groupe, choisissez Macros > <b>AccuseReception</b> et cliquez sur
-                                    <b>Ajouter >></b>.</li>
+                                    <b>Ajouter >></b>.
+                                </li>
                                 <li>4. Renommez avec une icône 📨.</li>
                             </ul>
                         </div>

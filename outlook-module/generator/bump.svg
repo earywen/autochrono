@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Minimalist App Icon Base (Corporate Dark Blue) -->
+  <rect width="256" height="256" rx="60" fill="#1c365b"/>
+  
+  <!-- Envelope Body -->
+  <path d="M 48 88 L 208 88 L 208 184 L 48 184 Z" 
+        fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" />
+  
+  <!-- Envelope Flap (Top) -->
+  <path d="M 48 88 L 128 144 L 208 88" 
+        fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+  
+  <!-- Automation / Validation Checkmark (Corporate Lime Green) -->
+  <path d="M 130 160 L 160 190 L 220 120" 
+        fill="none" stroke="#96c63e" stroke-width="20" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

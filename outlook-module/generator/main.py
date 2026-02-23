@@ -3,6 +3,7 @@ import sys
 import os
 import webview
 import warnings
+import ctypes
 
 # Configure logging globally
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -108,7 +109,16 @@ def get_html_path():
 
 
 def main():
-    """Launch the OutlookToolGen application."""
+    """Launch the BUMP application."""
+    # Hide console window aggressively if it exists (for Windows)
+    if os.name == 'nt':
+        try:
+            hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+            if hwnd:
+                ctypes.windll.user32.ShowWindow(hwnd, 0)
+        except Exception:
+            pass
+            
     print("--- APPLICATION STARTING ---") 
     warnings.filterwarnings('ignore')
     
@@ -119,9 +129,9 @@ def main():
         logger.info(f"Starting application with HTML: {html_path}")
         
         window = webview.create_window(
-            title='Outlook Tool Gen (Unified)',
+            title='BUMP (Burgeap Unified Mail Process)',
             url=html_path,
-            width=950,
+            width=1000,
             height=700,
             resizable=True,
             js_api=api,
@@ -131,7 +141,7 @@ def main():
         api.set_window(window)
         
         logger.info("Window created, starting webview...")
-        webview.start(debug=True, http_server=True)
+        webview.start(http_server=True)
         
     except Exception as e:
         logger.exception("Critical error during startup")

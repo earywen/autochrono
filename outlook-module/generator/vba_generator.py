@@ -1,5 +1,5 @@
 """
-OutlookToolGen - Unified VBA Generator
+BUMP - Unified VBA Generator
 """
 
 class UnifiedVBAGenerator:
